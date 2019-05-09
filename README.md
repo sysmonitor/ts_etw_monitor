@@ -3,8 +3,6 @@
 See Windows Event Traces in realtime sessions.
 Requires files TraceEvent.dll and TraceEvent.xml (included in repo)
 Requires .Net 4
-  
-Truesec Detect ETWMonitor, www.truesec.se  
 
 Usage: ETWMonitor [net_connect | net_transfer | process | thread | imageload | memory | registry | dns | sysmon]  
 
