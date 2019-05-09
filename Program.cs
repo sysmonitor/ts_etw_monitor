@@ -1,7 +1,6 @@
 ﻿// Inspired by
 // https://blogs.msdn.microsoft.com/vancem/2013/03/09/using-traceevent-to-mine-information-in-os-registered-etw-providers/
 // and modified a bit
-// Truesec Detect, www.truesec.se
 
 using Diagnostics.Tracing;
 using Diagnostics.Tracing.Parsers;
@@ -15,7 +14,6 @@ using System.Linq;
 
 namespace ETWMonitor
 {
-    // The main program monitors processes (and image loads) using ETW.  
     class Program
     {
         public const int INVALID_HANDLE_VALUE = -1;
@@ -115,9 +113,6 @@ namespace ETWMonitor
             return 0;
         }
 
-        // This is a demo of using TraceEvent to activate a 'real time' provider that is listening to 
-        // the MyEventSource above.   Normally this event source would be in a differnet process,  but 
-        // it also works if this process generate the evnets and I do that here for simplicity.    
         static int Main(string[] args)
         {
 
@@ -125,8 +120,7 @@ namespace ETWMonitor
             bool bDns = false, bSysmon = false, bRegistry = false, bFile = false;
 
             if (args.Length == 0)
-            {
-				Console.WriteLine("\nTruesec Detect ETWMonitor, www.truesec.se");
+			{ 
 				Console.WriteLine("\nUsage: ETWMonitor [net_connect | net_transfer | process | thread | imageload | memory | registry | dns | sysmon]\n");
                 Console.WriteLine("net_connect  : Show new TCP connections");
                 Console.WriteLine("net_transfer : Show network transfers");
@@ -226,14 +220,8 @@ namespace ETWMonitor
 
             using (var session = new TraceEventSession(sessionName, null))  // the null second parameter means 'real time session'
             {
-                // Note that sessions create a OS object (a session) that lives beyond the lifetime of the process
-                // that created it (like Filles), thus you have to be more careful about always cleaning them up. 
-                // An importanty way you can do this is to set the 'StopOnDispose' property which will cause the session to 
-                // stop (and thus the OS object will die) when the TraceEventSession dies.   Because we used a 'using'
-                // statement, this means that any exception in the code below will clean up the OS object.   
                 session.StopOnDispose = true;
 
-                // By default, if you hit Ctrl-C your .NET objects may not be disposed, so force it to.  It is OK if dispose is called twice.
                 Console.CancelKeyPress += delegate (object sender, ConsoleCancelEventArgs e) { session.Dispose(); };
 
                 // prepare to read from the session, connect the ETWTraceEventSource to the session
